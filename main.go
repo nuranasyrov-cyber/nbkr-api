@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -46,8 +47,12 @@ func main() {
 	http.HandleFunc("/api/currencies", currenciesHandler)
 	http.HandleFunc("/api/convert", convertHandler)
 
-	fmt.Println("Server running on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	fmt.Println("Server running on port " + port)
+	http.ListenAndServe(":"+port, nil)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
